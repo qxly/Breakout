@@ -1,18 +1,8 @@
-/*******************************************************************
-** This code is part of Breakout.
-**
-** Breakout is free software: you can redistribute it and/or modify
-** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
-** option) any later version.
-******************************************************************/
 #include "game.h"
 #include "resource_manager.h"
 
-
-Game::Game(GLuint width, GLuint height) 
-	: State(GAME_ACTIVE), Keys(), Width(width), Height(height) 
-{ 
+Game::Game(GLuint width, GLuint height) : _state(GameState::Active), _keys(), _width(width), _height(height)
+{
 
 }
 
@@ -21,23 +11,28 @@ Game::~Game()
 
 }
 
-void Game::Init()
+void Game::init()
 {
-    
+	// OpenGL configuration
+	glViewport(0, 0, _width, _height);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Game::Update(GLfloat dt)
-{
-
-}
-
-
-void Game::ProcessInput(GLfloat dt)
+void Game::processInput(GLfloat dt)
 {
 
 }
 
-void Game::Render()
+void Game::update(GLfloat dt)
 {
-    
+
 }
+
+void Game::render()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+

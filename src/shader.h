@@ -1,11 +1,3 @@
-/*******************************************************************
-** This code is part of Breakout.
-**
-** Breakout is free software: you can redistribute it and/or modify
-** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
-** option) any later version.
-******************************************************************/
 #ifndef SHADER_H
 #define SHADER_H
 
@@ -15,34 +7,36 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-// General purpsoe shader object. Compiles from file, generates
-// compile/link-time error messages and hosts several utility 
-// functions for easy management.
-class Shader
-{
+class Shader {
 public:
-    // State
-    GLuint ID; 
-    // Constructor
-    Shader() { }
-    // Sets the current shader as active
-    Shader  &Use();
-    // Compiles the shader from given source code
-    void    Compile(const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr); // Note: geometry source code is optional 
-    // Utility functions
-    void    SetFloat    (const GLchar *name, GLfloat value, GLboolean useShader = false);
-    void    SetInteger  (const GLchar *name, GLint value, GLboolean useShader = false);
-    void    SetVector2f (const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader = false);
-    void    SetVector2f (const GLchar *name, const glm::vec2 &value, GLboolean useShader = false);
-    void    SetVector3f (const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader = false);
-    void    SetVector3f (const GLchar *name, const glm::vec3 &value, GLboolean useShader = false);
-    void    SetVector4f (const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader = false);
-    void    SetVector4f (const GLchar *name, const glm::vec4 &value, GLboolean useShader = false);
-    void    SetMatrix4  (const GLchar *name, const glm::mat4 &matrix, GLboolean useShader = false);
+	Shader() {}
+
+public:
+	GLuint _id;	
+
+	Shader& use();
+
+	void compile(const GLchar* vertex_source, const GLchar* fragment_source, const GLchar* geometry_source = nullptr);
+
+	void setFloat(const GLchar* name, GLfloat value, GLboolean use_shader = false);
+	void setInteger(const GLchar *name, GLint value, GLboolean use_shader = false);
+	void setVector2f(const GLchar* name, GLfloat x, GLfloat y, GLboolean use_shader = false);
+	void setVector2f(const GLchar* name, const glm::vec2& value, GLboolean use_shader = false);
+	void setVector3f(const GLchar* name, GLfloat x, GLfloat y, GLfloat z, GLboolean use_shader = false);
+	void setVector3f(const GLchar* name, const glm::vec3& value, GLboolean use_shader = false);
+	void setVector4f(const GLchar* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean use_shader = false);
+	void setVector4f(const GLchar* name, const glm::vec4& value, GLboolean use_shader = false);
+	void setMatrix4(const GLchar* name, const glm::mat4& matrix, GLboolean use_shader = false);
+
 private:
-    // Checks if compilation or linking failed and if so, print the error logs
-    void    checkCompileErrors(GLuint object, std::string type); 
+	enum Compile : uint8_t
+	{
+		kVertex,
+		kFragment,
+		kGeometry,
+		kProgram
+	};
+	void checkCompileErrors(GLuint object, Compile type);
 };
 
 #endif
