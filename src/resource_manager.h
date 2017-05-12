@@ -20,11 +20,11 @@ public:
 	static std::map<std::string, Texture2D> _texture2Ds;
 
 public:
-	static Shader loadShader(const GLchar* v_shader_file, const GLchar* f_shader_file, const GLchar* g_shader_file, const std::string& name);
-	static Shader getShader(const std::string& name);
+	static Shader& loadShader(const GLchar* v_shader_file, const GLchar* f_shader_file, const GLchar* g_shader_file, const std::string& name);
+	static Shader& getShader(const std::string& name);
 
-	static Texture2D loadTexture2D(const GLchar* file, GLboolean alpha, const std::string& name);
-	static Texture2D getTexture2D(const std::string& name);
+	static Texture2D& loadTexture2D(const GLchar* file, GLboolean alpha, const std::string& name);
+	static Texture2D& getTexture2D(const std::string& name);
 
 	static void clear();
 

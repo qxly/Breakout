@@ -1,8 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <string>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include "sprite_renderer.h"
 
 class Game {
 public:
@@ -25,6 +29,11 @@ public:
 	void processInput(GLfloat dt);
 	void update(GLfloat dt);
 	void render();
+
+private:
+	const std::string& _spriteName = "sprite";
+	const std::string& _imageName = "face";
+	SpriteRenderer *_spriteRender = nullptr;
 };
 
 #endif
