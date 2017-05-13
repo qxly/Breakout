@@ -196,3 +196,6 @@ FakesAssemblies/
 *.opt
 *.db
 *.filters
+*.opendb
+*.sln
+*.exe

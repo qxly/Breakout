@@ -7,13 +7,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// Hold shader
 class Shader {
 public:
 	Shader() {}
 
-public:
 	GLuint _id;	
 
+public:
 	Shader& use();
 
 	void compile(const GLchar* vertex_source, const GLchar* fragment_source, const GLchar* geometry_source = nullptr);

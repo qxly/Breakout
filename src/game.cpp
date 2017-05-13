@@ -11,7 +11,10 @@ Game::Game(GLuint width, GLuint height) : _state(GameState::Active), _keys(), _w
 
 Game::~Game()
 {
-
+	delete _spriteRender;
+	_spriteRender = nullptr;
+	delete _player;
+	_player = nullptr;
 }
 
 void Game::init()
@@ -26,20 +29,61 @@ void Game::init()
 	ResourceManager::loadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, _spriteName);
 
 	// config shader
+	// left-top is(0,0)
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_width), static_cast<GLfloat>(_height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::getShader(_spriteName).use().setInteger("image", 0);
 	ResourceManager::getShader(_spriteName).setMatrix4("projection", projection);
 
 	// load texture2D
-	ResourceManager::loadTexture2D("textures/awesomeface.png", GL_TRUE, _imageName);
+	ResourceManager::loadTexture2D("textures/background.jpg", GL_FALSE, "background");
+	ResourceManager::loadTexture2D("textures/awesomeface.png", GL_TRUE, "face");
+	ResourceManager::loadTexture2D("textures/block.png", GL_FALSE, "block");
+	ResourceManager::loadTexture2D("textures/block_solid.png", GL_FALSE, "block_solid");
+	ResourceManager::loadTexture2D("textures/paddle.png", GL_TRUE, "paddle");
+
+	// load levels
+	GameLevel one;
+	one.load("levels/one.lvl", this->_width, this->_height* 0.5);
+	GameLevel two;
+	two.load("levels/two.lvl", this->_width, this->_height* 0.5);
+	GameLevel three;
+	three.load("levels/three.lvl", this->_width, this->_height* 0.5);
+	GameLevel four;
+	four.load("levels/four.lvl", this->_width, this->_height* 0.5);
+	_levels.push_back(one);
+	_levels.push_back(two);
+	_levels.push_back(three);
+	_levels.push_back(four);
+	_curlevel = 0;
 
 	// spriteRender
 	_spriteRender = new SpriteRenderer(ResourceManager::getShader(_spriteName));
 
+	// player
+	glm::vec2 playerPos = glm::vec2(_width * 0.5 - _playersize.x * 0.5, _height - _playersize.y);
+	_player = new GameObject(playerPos, _playersize, ResourceManager::getTexture2D("paddle"));
 }
 
 void Game::processInput(GLfloat dt)
 {	
+	if (_state == GameState::Active) {
+		GLfloat velocity = _playervelocity * dt;
+		if (_keys[GLFW_KEY_A])
+		{
+			if (_player->_position.x >= 0 )
+			{
+				_player->_position.x -= velocity;
+			}
+		}
+		else if(_keys[GLFW_KEY_D])
+		{
+			if (_player->_position.x <= _width - _player->_size.x)
+			{
+				_player->_position.x += velocity;
+			}
+		}
+
+	}
 }
 
 void Game::update(GLfloat dt)
@@ -52,6 +96,13 @@ void Game::render()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	_spriteRender->drawSprite(ResourceManager::getTexture2D(_imageName), glm::vec2(200, 200), glm::vec2(300, 400), 45.0f, glm::vec3(0.0, 1.0, 0.0));
+	if (_state == GameState::Active)
+	{
+		_spriteRender->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0, 0), glm::vec2(_width, _height), 0.0);
+
+		_levels[_curlevel].draw(*_spriteRender);
+
+		_player->draw(*_spriteRender);
+	}	
 }
 

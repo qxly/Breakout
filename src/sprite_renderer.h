@@ -8,6 +8,8 @@
 #include "texture.h"
 #include "shader.h"
 
+// Render each of image
+// Note:center is left-top
 class SpriteRenderer
 {
 public:

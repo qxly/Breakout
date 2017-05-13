@@ -3,13 +3,13 @@
 
 #include <GL/glew.h>
 
+// Hold Texture2D
 class Texture2D {
 public:
 	Texture2D();
 
 public:
 	GLuint _id;
-	
 	GLuint _width = 0, _height = 0; // Width and height of loaded image in pixels
 	GLuint _internal_format = GL_RGB; // Format of texture object
 	GLuint _image_format = GL_RGB; // Format of loaded image

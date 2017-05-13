@@ -15,7 +15,7 @@ class ResourceManager {
 private:
 	ResourceManager() {}
 
-public:
+private:
 	static std::map<std::string, Shader> _shaders;
 	static std::map<std::string, Texture2D> _texture2Ds;
 
