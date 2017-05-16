@@ -13,8 +13,12 @@ Game::~Game()
 {
 	delete _spriteRender;
 	_spriteRender = nullptr;
+
 	delete _player;
 	_player = nullptr;
+
+	delete _ball;
+	_ball = nullptr;
 }
 
 void Game::init()
@@ -35,21 +39,21 @@ void Game::init()
 	ResourceManager::getShader(_spriteName).setMatrix4("projection", projection);
 
 	// load texture2D
-	ResourceManager::loadTexture2D("textures/background.jpg", GL_FALSE, "background");
-	ResourceManager::loadTexture2D("textures/awesomeface.png", GL_TRUE, "face");
+	ResourceManager::loadTexture2D("textures/background.jpg", GL_FALSE, "background");	
 	ResourceManager::loadTexture2D("textures/block.png", GL_FALSE, "block");
 	ResourceManager::loadTexture2D("textures/block_solid.png", GL_FALSE, "block_solid");
 	ResourceManager::loadTexture2D("textures/paddle.png", GL_TRUE, "paddle");
+	ResourceManager::loadTexture2D("textures/awesomeface.png", GL_TRUE, "face");
 
 	// load levels
 	GameLevel one;
-	one.load("levels/one.lvl", this->_width, this->_height* 0.5);
+	one.load("levels/one.lvl", this->_width, this->_height * 0.5);
 	GameLevel two;
-	two.load("levels/two.lvl", this->_width, this->_height* 0.5);
+	two.load("levels/two.lvl", this->_width, this->_height * 0.5);
 	GameLevel three;
-	three.load("levels/three.lvl", this->_width, this->_height* 0.5);
+	three.load("levels/three.lvl", this->_width, this->_height * 0.5);
 	GameLevel four;
-	four.load("levels/four.lvl", this->_width, this->_height* 0.5);
+	four.load("levels/four.lvl", this->_width, this->_height * 0.5);
 	_levels.push_back(one);
 	_levels.push_back(two);
 	_levels.push_back(three);
@@ -62,6 +66,10 @@ void Game::init()
 	// player
 	glm::vec2 playerPos = glm::vec2(_width * 0.5 - _playersize.x * 0.5, _height - _playersize.y);
 	_player = new GameObject(playerPos, _playersize, ResourceManager::getTexture2D("paddle"));
+
+	// ball
+	glm::vec2 ballPos = playerPos + glm::vec2(_playersize.x * 0.5 - _ballradius, -_ballradius * 2.0);
+	_ball = new BallObject(ballPos, _ballradius, _ballvelocity, ResourceManager::getTexture2D("face"));
 }
 
 void Game::processInput(GLfloat dt)
@@ -73,22 +81,35 @@ void Game::processInput(GLfloat dt)
 			if (_player->_position.x >= 0 )
 			{
 				_player->_position.x -= velocity;
+				if (_ball->_stuck)
+				{
+					_ball->_position.x -= velocity;
+				}
 			}
 		}
-		else if(_keys[GLFW_KEY_D])
+		if(_keys[GLFW_KEY_D])
 		{
 			if (_player->_position.x <= _width - _player->_size.x)
 			{
 				_player->_position.x += velocity;
+				if (_ball->_stuck)
+				{
+					_ball->_position.x += velocity;
+				}
 			}
 		}
+		if (_keys[GLFW_KEY_SPACE])
+		{
+			_ball->_stuck = GL_FALSE;
+		}
+
 
 	}
 }
 
 void Game::update(GLfloat dt)
 {
-
+	_ball->move(dt, _width);
 }
 
 void Game::render()
@@ -103,6 +124,8 @@ void Game::render()
 		_levels[_curlevel].draw(*_spriteRender);
 
 		_player->draw(*_spriteRender);
+
+		_ball->draw(*_spriteRender);
 	}	
 }
 
