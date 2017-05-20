@@ -80,7 +80,7 @@ void GameLevel::init(const std::vector<std::vector<GLuint>>& tileData, GLuint le
 				glm::vec2 pos(unit_width * j, unit_height * i);
 				glm::vec2 size(unit_width, unit_height);
 				GameObject obj(pos, size, ResourceManager::getTexture2D("block_solid"), glm::vec3(0.8, 0.8, 0.8));
-				obj._isSoild = GL_FALSE;
+				obj._isSoild = GL_TRUE;
 				_bricks.push_back(obj);
 			}
 			else if (tileData[i][j] > 1)

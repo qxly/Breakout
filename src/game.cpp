@@ -57,6 +57,7 @@ void Game::init()
 	_levels.push_back(one);
 	_levels.push_back(two);
 	_levels.push_back(three);
+
 	_levels.push_back(four);
 	_curlevel = 0;
 
@@ -110,6 +111,9 @@ void Game::processInput(GLfloat dt)
 void Game::update(GLfloat dt)
 {
 	_ball->move(dt, _width);
+
+	// check collision
+	doCollisions();
 }
 
 void Game::render()
@@ -127,5 +131,37 @@ void Game::render()
 
 		_ball->draw(*_spriteRender);
 	}	
+}
+
+void Game::doCollisions()
+{
+	for (auto& box : _levels[_curlevel]._bricks)
+	{
+		if (!box._destroyed)
+		{
+			if (checkCollision(*_ball, box))
+			{
+				if (!box._isSoild)
+				{
+					box._destroyed = GL_TRUE;
+				}
+			}
+		}
+	}
+}
+
+GLboolean Game::checkCollision(BallObject& a, GameObject& b)
+{
+	glm::vec2 centerA(a._position + a._size);
+	glm::vec2 aabb_half_extents(b._size.x * 0.5, b._size.y * 0.5);
+	glm::vec2 centerB(b._position + aabb_half_extents);
+
+	glm::vec2 difference = centerA - centerB;
+	glm::vec2 clamped = glm::clamp(difference, -aabb_half_extents, aabb_half_extents);
+
+	glm::vec2 closed = centerB + clamped;
+	difference = closed - centerA;
+	
+	return glm::length(difference) < a._radius;
 }
 

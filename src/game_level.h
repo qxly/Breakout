@@ -17,7 +17,7 @@ public:
 	GameLevel();
 	~GameLevel();
 
-private:
+public:
 	std::vector<GameObject> _bricks;
 
 public:

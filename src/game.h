@@ -46,11 +46,16 @@ public:
 	BallObject* _ball = nullptr;
 	const GLfloat _ballradius = 12.5;
 	const glm::vec2& _ballvelocity = { 100.0, -350.0 };
+
 public:
 	void init();
 	void processInput(GLfloat dt);
 	void update(GLfloat dt);
 	void render();
+
+private:
+	void doCollisions();
+	GLboolean checkCollision(BallObject& a, GameObject& b);
 };
 
 #endif
