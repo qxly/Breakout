@@ -20,8 +20,14 @@ public:
 public:
 	std::vector<GameObject> _bricks;
 
+private:
+	std::string _file;
+	GLuint _levelWidth;
+	GLuint _levelHeight;
+
 public:
 	void load(const GLchar* file, GLuint levelWidth, GLuint levelHeight);
+	void reset();
 
 	void draw(SpriteRenderer& renderer);
 

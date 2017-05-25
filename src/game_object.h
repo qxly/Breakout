@@ -13,7 +13,7 @@ class GameObject
 public:
 	GameObject();
 	GameObject(const glm::vec2& pos, const glm::vec2& size, const Texture2D& sprite, const glm::vec3& color = glm::vec3(1.0), const glm::vec2& velocity = glm::vec2(0.0));
-	~GameObject();
+	virtual ~GameObject();
 
 public:
 	glm::vec2 _position, _size, _velocity;
@@ -25,6 +25,7 @@ public:
 
 public:
 	void draw(SpriteRenderer& renderer);
+	virtual glm::vec2 center() const;
 };
 
 #endif

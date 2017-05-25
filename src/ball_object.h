@@ -18,5 +18,6 @@ public:
 public:
 	glm::vec2 move(GLfloat dt, GLuint window_width);
 	void reset(const glm::vec2& position, const glm::vec2& velocity);
+	virtual glm::vec2 center() const override;
 };
 #endif

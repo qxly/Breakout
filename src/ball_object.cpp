@@ -42,3 +42,8 @@ void BallObject::reset(const glm::vec2& position, const glm::vec2& velocity)
 	_stuck = GL_TRUE;
 }
 
+glm::vec2 BallObject::center() const
+{
+	return _position + glm::vec2(_radius);
+}
+

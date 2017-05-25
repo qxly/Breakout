@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <string>
+#include <tuple>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -22,6 +23,15 @@ public:
 		Menu,
 		Win
 	};
+
+	enum Direction
+	{
+		UP,
+		RIGHT,
+		DOWN,
+		LEFT
+	};
+	typedef std::tuple<GLboolean, Direction, const glm::vec2&> Collision;
 
 public:
 	// control
@@ -55,7 +65,10 @@ public:
 
 private:
 	void doCollisions();
-	GLboolean checkCollision(BallObject& a, GameObject& b);
+	Collision checkCollision(BallObject& a, GameObject& b) const;
+	Direction vectorDirection(const glm::vec2& target) const ;
+	void resetLevel();
+	void resetPlayeraAndBall();
 };
 
 #endif

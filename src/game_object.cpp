@@ -18,3 +18,8 @@ void GameObject::draw(SpriteRenderer& renderer)
 	renderer.drawSprite(_sprite, _position, _size, _rotation, _color);
 }
 
+glm::vec2 GameObject::center() const
+{
+	return _position + _size * glm::vec2(0.5);
+}
+

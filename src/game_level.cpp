@@ -13,6 +13,10 @@ GameLevel::~GameLevel()
 
 void GameLevel::load(const GLchar* file, GLuint levelWidth, GLuint levelHeight)
 {
+	_file = file;
+	_levelWidth = levelWidth;
+	_levelHeight = levelHeight;
+
 	// clear old data
 	_bricks.clear();
 
@@ -38,6 +42,11 @@ void GameLevel::load(const GLchar* file, GLuint levelWidth, GLuint levelHeight)
 			init(tiledata, levelWidth, levelHeight);
 		}
 	}
+}
+
+void GameLevel::reset()
+{
+	load(_file.c_str(), _levelWidth, _levelHeight);
 }
 
 void GameLevel::draw(SpriteRenderer& renderer)
