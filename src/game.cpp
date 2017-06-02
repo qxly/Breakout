@@ -21,6 +21,9 @@ Game::~Game()
 
 	delete _ball;
 	_ball = nullptr;
+
+	delete _particleGen;
+	_particleGen = nullptr;
 }
 
 void Game::init()
@@ -33,12 +36,15 @@ void Game::init()
 
 	// load shader
 	ResourceManager::loadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, _spriteName);
+	ResourceManager::loadShader("shaders/particle.vs", "shaders/particle.frag", nullptr, _particleName);
 
 	// config shader
 	// left-top is(0,0)
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_width), static_cast<GLfloat>(_height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::getShader(_spriteName).use().setInteger("image", 0);
 	ResourceManager::getShader(_spriteName).setMatrix4("projection", projection);
+	ResourceManager::getShader(_particleName).use().setInteger("image", 0);
+	ResourceManager::getShader(_particleName).setMatrix4("projection", projection);
 
 	// load texture2D
 	ResourceManager::loadTexture2D("textures/background.jpg", GL_FALSE, "background");	
@@ -46,6 +52,7 @@ void Game::init()
 	ResourceManager::loadTexture2D("textures/block_solid.png", GL_FALSE, "block_solid");
 	ResourceManager::loadTexture2D("textures/paddle.png", GL_TRUE, "paddle");
 	ResourceManager::loadTexture2D("textures/awesomeface.png", GL_TRUE, "face");
+	ResourceManager::loadTexture2D("textures/particle.png", GL_TRUE, "particle");
 
 	// load levels
 	GLuint levelWidth = static_cast<GLuint>(this->_width);
@@ -70,6 +77,9 @@ void Game::init()
 
 	// player/ball
 	resetPlayeraAndBall();
+
+	// particle gen
+	_particleGen = new ParticleGenerator(ResourceManager::getShader(_particleName), ResourceManager::getTexture2D("particle"), 500);
 }
 
 void Game::processInput(GLfloat dt)
@@ -112,6 +122,9 @@ void Game::update(GLfloat dt)
 	// collision
 	doCollisions();
 
+	// particle
+	_particleGen->update(dt, *_ball, 2, glm::vec2(_ball->_radius * 0.5));
+
 	// check loss ball
 	if (_ball->_position.y >= _height)
 	{
@@ -133,7 +146,12 @@ void Game::render()
 
 		_player->draw(*_spriteRender);
 
-		_ball->draw(*_spriteRender);
+		if (!_ball->_stuck)
+		{
+			_particleGen->draw();
+		}		
+
+		_ball->draw(*_spriteRender);		
 	}	
 }
 

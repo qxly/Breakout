@@ -10,6 +10,7 @@
 #include "sprite_renderer.h"
 #include "game_level.h"
 #include "ball_object.h"
+#include "particle_generator.h"
 
 // Game control
 class Game {
@@ -41,6 +42,7 @@ public:
 
 	// shader
 	const std::string& _spriteName = "sprite";
+	const std::string& _particleName = "particle";
 	SpriteRenderer *_spriteRender = nullptr;	
 
 	// levels
@@ -56,6 +58,9 @@ public:
 	BallObject* _ball = nullptr;
 	const GLfloat _ballradius = 12.5;
 	const glm::vec2& _ballvelocity = { 100.0, -350.0 };
+
+	// particles
+	ParticleGenerator* _particleGen = nullptr;
 
 public:
 	void init();
