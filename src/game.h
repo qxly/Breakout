@@ -11,6 +11,7 @@
 #include "game_level.h"
 #include "ball_object.h"
 #include "particle_generator.h"
+#include "postprocessing.h"
 
 // Game control
 class Game {
@@ -41,8 +42,6 @@ public:
 	GLuint _width, _height;
 
 	// shader
-	const std::string& _spriteName = "sprite";
-	const std::string& _particleName = "particle";
 	SpriteRenderer *_spriteRender = nullptr;	
 
 	// levels
@@ -61,6 +60,10 @@ public:
 
 	// particles
 	ParticleGenerator* _particleGen = nullptr;
+
+	// postprocessing
+	PostProcessing* _effects = nullptr;
+	GLfloat _shakeTime = 0.0f;
 
 public:
 	void init();

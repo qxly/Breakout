@@ -24,6 +24,9 @@ Game::~Game()
 
 	delete _particleGen;
 	_particleGen = nullptr;
+
+	delete _effects;
+	_effects = nullptr;
 }
 
 void Game::init()
@@ -35,16 +38,17 @@ void Game::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// load shader
-	ResourceManager::loadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, _spriteName);
-	ResourceManager::loadShader("shaders/particle.vs", "shaders/particle.frag", nullptr, _particleName);
+	ResourceManager::loadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, "sprite");
+	ResourceManager::loadShader("shaders/particle.vs", "shaders/particle.frag", nullptr, "particle");
+	ResourceManager::loadShader("shaders/postprocessing.vs", "shaders/postprocessing.frag", nullptr, "postprocessing");
 
 	// config shader
 	// left-top is(0,0)
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_width), static_cast<GLfloat>(_height), 0.0f, -1.0f, 1.0f);
-	ResourceManager::getShader(_spriteName).use().setInteger("image", 0);
-	ResourceManager::getShader(_spriteName).setMatrix4("projection", projection);
-	ResourceManager::getShader(_particleName).use().setInteger("image", 0);
-	ResourceManager::getShader(_particleName).setMatrix4("projection", projection);
+	ResourceManager::getShader("sprite").use().setInteger("image", 0);
+	ResourceManager::getShader("sprite").setMatrix4("projection", projection);
+	ResourceManager::getShader("particle").use().setInteger("image", 0);
+	ResourceManager::getShader("particle").setMatrix4("projection", projection);
 
 	// load texture2D
 	ResourceManager::loadTexture2D("textures/background.jpg", GL_FALSE, "background");	
@@ -73,13 +77,16 @@ void Game::init()
 	_curlevel = 0;
 
 	// spriteRender
-	_spriteRender = new SpriteRenderer(ResourceManager::getShader(_spriteName));
+	_spriteRender = new SpriteRenderer(ResourceManager::getShader("sprite"));
 
 	// player/ball
 	resetPlayeraAndBall();
 
 	// particle gen
-	_particleGen = new ParticleGenerator(ResourceManager::getShader(_particleName), ResourceManager::getTexture2D("particle"), 500);
+	_particleGen = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture2D("particle"), 500);
+
+	// postprpcessing
+	_effects = new PostProcessing(ResourceManager::getShader("postprocessing"), _width, _height);
 }
 
 void Game::processInput(GLfloat dt)
@@ -123,13 +130,23 @@ void Game::update(GLfloat dt)
 	doCollisions();
 
 	// particle
-	_particleGen->update(dt, *_ball, 2, glm::vec2(_ball->_radius * 0.5));
+	_particleGen->update(dt, *_ball, 2, glm::vec2(_ball->_radius * 0.5f));
 
 	// check loss ball
 	if (_ball->_position.y >= _height)
 	{
 		_levels[_curlevel].reset();
 		resetPlayeraAndBall();
+	}
+
+	// shake
+	if (_shakeTime > 0.0f)
+	{
+		_shakeTime -= dt;
+		if (_shakeTime < 0.0f)
+		{
+			_effects->_shake = GL_FALSE;
+		}
 	}
 }
 
@@ -140,18 +157,15 @@ void Game::render()
 
 	if (_state == GameState::Active)
 	{
+		_effects->beginRender();
 		_spriteRender->drawSprite(ResourceManager::getTexture2D("background"), glm::vec2(0, 0), glm::vec2(_width, _height), 0.0);
-
 		_levels[_curlevel].draw(*_spriteRender);
-
 		_player->draw(*_spriteRender);
+		_particleGen->draw();
+		_ball->draw(*_spriteRender);
+		_effects->endRender();		
 
-		if (!_ball->_stuck)
-		{
-			_particleGen->draw();
-		}		
-
-		_ball->draw(*_spriteRender);		
+		_effects->render(static_cast<GLfloat>(glfwGetTime()));
 	}	
 }
 
@@ -175,6 +189,11 @@ void Game::doCollisions()
 			if (!box._isSoild)
 			{
 				box._destroyed = GL_TRUE;
+			}
+			else // if solid, enable shake
+			{
+				_shakeTime = 0.05f;
+				_effects->_shake = GL_TRUE;
 			}
 			auto dir = std::get<1>(collision);
 			auto diff_vector = std::get<2>(collision);
