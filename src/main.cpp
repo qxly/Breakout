@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 	while (!glfwWindowShouldClose(window))
 	{
 		// Calculate delta time
-		GLfloat currentFrame = glfwGetTime();
+		GLfloat currentFrame = (GLfloat)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		glfwPollEvents();

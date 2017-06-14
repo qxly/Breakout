@@ -8,12 +8,13 @@
 
 class BallObject : public GameObject {
 public:
-	BallObject();
 	BallObject(const glm::vec2& pos, GLfloat radius, const glm::vec2& velocity, const Texture2D& sprite);
 
 public:
 	GLfloat _radius;
 	GLboolean _stuck;
+	GLboolean _sticky;
+	GLboolean _passThrough;
 
 public:
 	glm::vec2 move(GLfloat dt, GLuint window_width);

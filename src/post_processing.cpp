@@ -1,8 +1,8 @@
-#include "postprocessing.h"
+#include "post_processing.h"
 #include "shader.h"
 #include <iostream>
 
-PostProcessing::PostProcessing(Shader& shader, GLuint width, GLuint height) : _postShader(shader), _width(width), _height(height), _shake(GL_FALSE), _confuse(GL_FALSE), _chaos(GL_TRUE)
+PostProcessing::PostProcessing(Shader& shader, GLuint width, GLuint height) : _postShader(shader), _width(width), _height(height)
 {
 	glGenFramebuffers(1, &_msfbo);
 	glGenFramebuffers(1, &_fbo);

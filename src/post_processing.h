@@ -19,7 +19,7 @@ private:
 	Texture2D _texture2D;
 
 public:
-	GLboolean _shake, _confuse, _chaos;
+	GLboolean _shake = GL_FALSE, _confuse = GL_FALSE, _chaos = GL_FALSE;
 
 public:
 	void beginRender();

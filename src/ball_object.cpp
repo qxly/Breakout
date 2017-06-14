@@ -1,11 +1,6 @@
 #include "ball_object.h"
 
-BallObject::BallObject() : GameObject(), _radius(12.5), _stuck(GL_TRUE)
-{
-
-}
-
-BallObject::BallObject(const glm::vec2& pos, GLfloat radius, const glm::vec2& velocity, const Texture2D& sprite) : GameObject(pos, glm::vec2(radius * 2.0, radius * 2.0), sprite, glm::vec3(1.0), velocity), _radius(radius), _stuck(GL_TRUE)
+BallObject::BallObject(const glm::vec2& pos, GLfloat radius, const glm::vec2& velocity, const Texture2D& sprite) : GameObject(pos, glm::vec2(radius * 2.0, radius * 2.0), sprite, glm::vec3(1.0), velocity), _radius(radius), _stuck(GL_TRUE), _sticky(GL_FALSE), _passThrough(GL_FALSE)
 {
 
 }
@@ -40,6 +35,8 @@ void BallObject::reset(const glm::vec2& position, const glm::vec2& velocity)
 	_position = position;
 	_velocity = velocity;
 	_stuck = GL_TRUE;
+	_sticky = GL_FALSE;
+	_passThrough = GL_FALSE;
 }
 
 glm::vec2 BallObject::center() const

@@ -11,7 +11,8 @@
 #include "game_level.h"
 #include "ball_object.h"
 #include "particle_generator.h"
-#include "postprocessing.h"
+#include "post_processing.h"
+#include "power_up.h"
 
 // Game control
 class Game {
@@ -33,7 +34,7 @@ public:
 		DOWN,
 		LEFT
 	};
-	typedef std::tuple<GLboolean, Direction, const glm::vec2&> Collision;
+	typedef std::tuple<GLboolean, Direction, glm::vec2> Collision;
 
 public:
 	// control
@@ -41,22 +42,23 @@ public:
 	GameState _state;	
 	GLuint _width, _height;
 
+private:
 	// shader
 	SpriteRenderer *_spriteRender = nullptr;	
 
 	// levels
 	std::vector<GameLevel> _levels;
-	GLuint _curlevel = 0;
+	GLuint _curlevel;
 
 	// player
 	GameObject* _player = nullptr;
-	const glm::vec2& _playersize = { 100, 20 };
-	const GLfloat& _playervelocity = { 500.0f };
+	const glm::vec2& _PLAYER_SIZE = { 100, 20 };
+	const GLfloat& _PLAY_VELOCITY = { 500.0f };
 
 	// ball
 	BallObject* _ball = nullptr;
-	const GLfloat _ballradius = 12.5;
-	const glm::vec2& _ballvelocity = { 100.0, -350.0 };
+	const GLfloat _BALL_RADIUS = 12.5;
+	const glm::vec2& _INIT_BALL_VELOCITY = { 100.0, -350.0 };
 
 	// particles
 	ParticleGenerator* _particleGen = nullptr;
@@ -65,6 +67,9 @@ public:
 	PostProcessing* _effects = nullptr;
 	GLfloat _shakeTime = 0.0f;
 
+	// powerups
+	std::vector<PowerUp> _powerups;
+
 public:
 	void init();
 	void processInput(GLfloat dt);
@@ -72,11 +77,18 @@ public:
 	void render();
 
 private:
+	// collision
 	void doCollisions();
 	Collision checkCollision(BallObject& a, GameObject& b) const;
 	Direction vectorDirection(const glm::vec2& target) const ;
-	void resetLevel();
-	void resetPlayeraAndBall();
+
+	// reset
+	void reset();
+
+	// powerups
+	void spawnPowerUps(const GameObject& block);
+	void updatePowerUps(GLfloat dt);
+	void activePowerup(const PowerUp& powerUp);
 };
 
 #endif

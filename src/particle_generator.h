@@ -40,7 +40,7 @@ private:
 	GLuint _vao;
 	GLuint _lastUsedParticle = 0;
 
-public:
+private:
 	GLuint firstUnusedParticle();
 	void respawnParticle(Particle& particle, const GameObject& object, glm::vec2 offset = glm::vec2(0.0));
 

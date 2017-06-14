@@ -25,7 +25,7 @@
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="particle_generator.cpp" />
-    <ClCompile Include="postprocessing.cpp" />
+    <ClCompile Include="post_processing.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite_renderer.cpp" />
@@ -37,7 +37,8 @@
     <ClInclude Include="game_level.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="particle_generator.h" />
-    <ClInclude Include="postprocessing.h" />
+    <ClInclude Include="post_processing.h" />
+    <ClInclude Include="power_up.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite_renderer.h" />
