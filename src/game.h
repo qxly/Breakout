@@ -14,6 +14,10 @@
 #include "post_processing.h"
 #include "power_up.h"
 
+namespace irrklang {
+	class ISoundEngine;
+}
+
 // Game control
 class Game {
 public:
@@ -69,6 +73,9 @@ private:
 
 	// powerups
 	std::vector<PowerUp> _powerups;
+
+	// audio
+	irrklang::ISoundEngine* _soundEngine = nullptr;
 
 public:
 	void init();

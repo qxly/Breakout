@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;SOIL.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;SOIL.lib;assimp-vc140-mt.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../dep/lib_x86/debug_static;../dep/lib_x86/debug</AdditionalLibraryDirectories>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>

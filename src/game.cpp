@@ -5,8 +5,10 @@
 #include "resource_manager.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <irrklang/irrKlang.h>
 
 using Collision = Game::Collision;
+using namespace irrklang;
 
 Game::Game(GLuint width, GLuint height) : _state(GameState::Active), _keys(), _width(width), _height(height)
 {
@@ -28,6 +30,8 @@ Game::~Game()
 
 	delete _effects;
 	_effects = nullptr;
+
+	_soundEngine->drop();
 }
 
 void Game::init()
@@ -91,6 +95,10 @@ void Game::init()
 
 	// player/ball//postprocessing
 	reset();
+
+	//audio
+	_soundEngine = createIrrKlangDevice();
+	_soundEngine->play2D("audio/breakout.mp3", GL_TRUE);
 }
 
 void Game::processInput(GLfloat dt)
@@ -203,11 +211,13 @@ void Game::doCollisions()
 			{
 				_shakeTime = 0.05f;
 				_effects->_shake = GL_TRUE;
+				_soundEngine->play2D("audio/solid.wav", GL_FALSE);
 			}
 			else
 			{
 				box._destroyed = GL_TRUE;
 				spawnPowerUps(box);
+				_soundEngine->play2D("audio/bleep.mp3", GL_FALSE);
 			}
 			if (!(_ball->_passThrough && !box._isSoild))
 			{
@@ -267,6 +277,7 @@ void Game::doCollisions()
 			it._destroyed = GL_TRUE;
 			it._activated = GL_TRUE;
 			activePowerup(it);
+			_soundEngine->play2D("audio/powerup.mp3", GL_FALSE);
 		}
 	}
 
@@ -285,6 +296,7 @@ void Game::doCollisions()
 			_ball->_velocity = glm::normalize(_ball->_velocity) * glm::length(oldVelocity);
 
 			_ball->_stuck = _ball->_sticky;
+			_soundEngine->play2D("audio/bleep.wav", GL_FALSE);
 		}
 	}
 }
