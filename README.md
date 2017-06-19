@@ -1,5 +1,5 @@
 # Breakout
-a 2D game using OpenGL
+**a 2D game using OpenGL**
 
 我们的Breakout还将拥有：
 
