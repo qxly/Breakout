@@ -17,3 +17,4 @@
 
 ![](cover.png)
 
+感谢Joey de Vries，他在我学习OpenGL过程中给了很大帮助！
