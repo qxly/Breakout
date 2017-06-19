@@ -1,7 +1,7 @@
 # Breakout
 **a 2D game using OpenGL**
 
-我们的Breakout还将拥有：
+**特性:**  
 
 1.你见过最棒的画质
 
