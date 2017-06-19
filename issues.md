@@ -15,7 +15,7 @@
 
 # 三、碰撞
 1.ball与窗口碰撞  
-（1）ball碰到窗口左、右、上即反弹，在BallObject中move函数实现；  
+（1）ball碰到窗口左、右、上即反弹，在BallObject中move函数实现  
 （2）ball碰到窗口下，按照当前关卡reset  
 2.ball与砖块碰撞  
 （1）采用矩形和圆碰撞检测，查找最近的  
@@ -28,15 +28,13 @@
 （3）假如击中一个砖块的拐角，会导致翻转速度方向错误，此时返回水平或垂直  
 
 # 四、粒子
-就像ball带了个尾巴；  
-每个粒子都是一个quad，其拥有位置、速度、颜色和生命；  
-作为一个插件，加入程序；  
+就像ball带了个尾巴，每个粒子都是一个quad，其拥有位置、速度、颜色和生命，作为一个插件，加入程序。
 
 # 五、后处理
-1.有三种特效  
-shake：碰到solid时产生晃动  
-confuse：翻转颜色和坐标系  
-chaos：产生一种混乱效果  
+1.有三种特效  
+（1）shake：碰到solid时产生晃动  
+（2）confuse：翻转颜色和坐标系  
+（3）chaos：产生一种混乱效果  
 2.技术实现重点  
 （1）使用多重采样Multisample抗锯齿  
 （2）使用渲染到纹理进行后处理，此时需要第二个fbo  
@@ -46,13 +44,14 @@ chaos：产生一种混乱效果
 
 # 六、道具
 1.道具种类 
-有六种道具，正向：speed、sticky、pass-through、pad-size-increase，反向：confuse、chaos  
-speed:增加ball速度20%  
-sticky:当ball与paddle碰撞时被黏住，直到再次按下spacebar键，通过此道具可以设置ball发射位置  
-pass-through:穿过非solid砖块  
-pad-size-increase:增长paddle50像素  
-confuse:激活confuse，让用户困惑  
-chaos:激活chao，让用户迷失方向  
+正向：
+（1）speed:增加ball速度20%  
+（2）sticky:当ball与paddle碰撞时被黏住，直到再次按下spacebar键，通过此道具可以设置ball发射位置  
+（3）pass-through:穿过非solid砖块  
+（4）pad-size-increase:增长paddle50像素  
+反向：  
+（5）confuse:激活confuse，让用户困惑  
+（6）chaos:激活chao，让用户迷失方向  
 2.道具产生  
 ball碰撞到非solid砖块时，根据一定概率掉落道具，并将新道具加入道具库  
 3.道具激活  
