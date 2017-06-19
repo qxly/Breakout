@@ -1,5 +1,5 @@
 # Breakout
-**a 2D game using OpenGL**
+**A 2D game using OpenGL**
 
 **特性:**  
 
